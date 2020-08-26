@@ -8,7 +8,7 @@ edition = "2018"
 types = ["tdlib_types", "serde_json"]
 
 [dependencies]
-tdjson_sys = { git = "https://github.com/agnipau/tdjson_sys" }
+tdjson_sys = { git = "https://github.com/agnipau/tdjson-sys" }
 thiserror = "1.0.20"
 
 serde_json = { version = "1.0.57", optional = true }
