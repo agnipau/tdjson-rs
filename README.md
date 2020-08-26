@@ -14,7 +14,7 @@ responses.
 To use this feature add this to your Cargo.toml:
 
 ```toml
-tdjson =  { git = "https://github.com/agnipau/tdjson_rs", features = ["types"] }
+tdjson =  { git = "https://github.com/agnipau/tdjson-rs", features = ["types"] }
 ```
 
 Note that it will significantly increase compile time, because there a lot of
