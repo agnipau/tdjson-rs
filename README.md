@@ -1,7 +1,7 @@
-# tdjson_rs
+# tdjson-rs
 
 To use this crate you must have TDLib installed.
-Look [here](https://github.com/agnipau/tdjson_sys/blob/master/README.md) for
+Look [here](https://github.com/agnipau/tdjson-sys/blob/master/README.md) for
 more informations.
 
 ## Why not [this version](https://github.com/mersinvald/tdjson-rs)?
