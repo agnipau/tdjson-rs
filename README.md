@@ -1,17 +1,22 @@
-## TDLIB Json Client for Rust
+# tdjson_rs
 
-### Preparing bindgen
+To use this crate you must have TDLib installed.
+Look [here](https://github.com/agnipau/tdjson_sys/blob/master/README.md) for
+more informations.
 
-Please follow the steps described in the [tdlib-sys](https://github.com/mersinvald/tdjson-sys) repo to setup FFI bindings generation.
+## Why not [this version](https://github.com/mersinvald/tdjson-rs)?
 
-### Usage
+This library doesn't use expect, it let's you decide how to handle errors.
 
-Add `tdjson` to your `Cargo.toml` dependency list
+Additionally it includes a feature to send typed requests and receive typed
+responses.
+
+To use this feature add this to your Cargo.toml:
+
 ```toml
-tdjson = "0.2"
+tdjson =  { git = "https://github.com/agnipau/tdjson_rs", features = ["types"] }
 ```
 
-And let the Cargo do it's magic!
-```bash
-cargo build
-```
+Note that it will significantly increase compile time, because there a lot of
+proc macros that are required to run to generate the code. This feature is
+disabled by default.

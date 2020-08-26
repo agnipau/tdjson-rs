@@ -1,12 +1,15 @@
 [package]
 name = "tdjson"
-version = "0.2.2"
-authors = ["Mike Lubinets <lubinetsm@yandex.ru>"]
-description = "TDLIB Json Client for Rust"
-documentation = "https://docs.rs/crate/tdjson"
-repository = "https://github.com/mersinvald/tdjson-rs"
-license = "MIT"
-keywords = ["telegram", "tdlib", "bindings"]
+version = "0.1.0"
+authors = ["Matteo Guarda <matteoguarda@tutanota.com>"]
+edition = "2018"
+
+[features]
+types = ["tdlib_types", "serde_json"]
 
 [dependencies]
-tdjson-sys = { version = "0.1.5" }
+tdjson_sys = { git = "https://github.com/agnipau/tdjson_sys" }
+thiserror = "1.0.20"
+
+serde_json = { version = "1.0.57", optional = true }
+tdlib_types = { git = "https://github.com/agnipau/tdlib_types", optional = true }
