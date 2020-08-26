@@ -1,14 +1,11 @@
-pub mod client;
-pub mod error;
-
-pub use client::iter::ClientIter;
-#[cfg(feature = "types")]
-pub use client::iter::TypedClientIter;
+mod client;
+mod error;
 
 pub use client::receive::ReceiveClient;
-pub use client::safe::Client;
 pub use client::send::SendClient;
-
+#[cfg(feature = "types")]
+pub use client::typed::TypedClient;
+pub use client::untyped::Client;
 pub use error::TdlibError;
 
 use std::{ffi::CString, str};
@@ -20,12 +17,6 @@ use std::{ffi::CString, str};
 /// # Parameters
 ///
 /// `path` Maybe path to a file where the internal TDLib log will be written. Use `None` to switch back to the default logging behaviour.
-///
-/// # Examples
-///
-/// ```
-/// set_log_file_path(Some("/var/log/tdlib/tdlib.log"));
-/// ```
 pub fn set_log_file_path(path: &str) -> Result<i32, TdlibError> {
     let cpath = CString::new(path).map_err(TdlibError::NulError)?;
     Ok(unsafe { tdjson_sys::td_set_log_file_path(cpath.as_ptr()) })
@@ -41,12 +32,6 @@ pub fn set_log_file_path(path: &str) -> Result<i32, TdlibError> {
 /// value 1 corresponds to errors, value 2 corresponds to warnings and debug warnings,
 /// value 3 corresponds to informational, value 4 corresponds to debug, value 5 corresponds
 /// to verbose debug, value greater than 5 and up to 1024 can be used to enable even more logging.
-///
-/// # Examples
-///
-/// ```
-/// set_log_verbosity_level(3);
-/// ```
 pub fn set_log_verbosity_level(level: i32) {
     unsafe {
         tdjson_sys::td_set_log_verbosity_level(level);
@@ -60,12 +45,6 @@ pub fn set_log_verbosity_level(level: i32) {
 /// # Parameters
 ///
 /// `size` Maximum size of the file to where the internal TDLib log is written before the file will be auto-rotated. Should be positive.
-///
-/// # Examples
-///
-/// ```
-/// set_log_max_file_size(1024 * 1024);
-/// ```
 pub fn set_log_max_file_size(size: i64) {
     unsafe { tdjson_sys::td_set_log_max_file_size(size) }
 }
