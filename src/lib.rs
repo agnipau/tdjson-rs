@@ -1,5 +1,5 @@
-mod client;
-mod error;
+pub mod client;
+pub mod error;
 
 pub use client::iter::ClientIter;
 #[cfg(feature = "types")]
@@ -9,10 +9,9 @@ pub use client::receive::ReceiveClient;
 pub use client::safe::Client;
 pub use client::send::SendClient;
 
-use {
-    crate::error::TdlibError,
-    std::{ffi::CString, str},
-};
+pub use error::TdlibError;
+
+use std::{ffi::CString, str};
 
 /// Sets the path to the file where the internal TDLib log will be written.
 ///
