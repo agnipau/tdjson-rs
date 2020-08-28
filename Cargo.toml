@@ -5,11 +5,11 @@ authors = ["Matteo Guarda <matteoguarda@tutanota.com>"]
 edition = "2018"
 
 [features]
-types = ["tdlib_types", "serde_json"]
+types = ["tdlib-types", "serde_json"]
 
 [dependencies]
 tdjson-sys = { git = "https://github.com/agnipau/tdjson-sys" }
 thiserror = "1.0.20"
 
 serde_json = { version = "1.0.57", optional = true }
-tdlib_types = { git = "https://github.com/agnipau/tdlib_types", optional = true }
+tdlib-types = { git = "https://github.com/agnipau/tdlib-types", optional = true }
