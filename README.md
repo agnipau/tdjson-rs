@@ -21,6 +21,34 @@ Note that it will significantly increase compile time, because there a lot of
 proc macros that are required to run to generate the code. This feature is
 disabled by default.
 
+## Note
+
+If you want to use the typed version and you want to omit some fields that
+are mandatory by the type system, here is how you can do it:
+
+```rust
+let input_message_content =
+    types::InputMessageContent::InputMessageText(types::InputMessageText {
+        clear_draft: true,
+        disable_web_page_preview: false,
+        text,
+    });
+
+let req = serde_json::json!({
+    "@type": "sendMessage",
+    "chat_id": msg.chat_id,
+    "reply_to_message_id": msg.id,
+    "input_message_content": input_message_content,
+});
+
+client
+    .send_untyped(&serde_json::to_string(&req).unwrap())
+    .unwrap();
+```
+
+Just keep in mind that when you want to create a method using json! you must
+put it's camel case name in "@type".
+
 #### License
 
 <sup>
@@ -37,4 +65,3 @@ Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in this crate by you, as defined in the Apache-2.0 license, shall
 be dual licensed as above, without any additional terms or conditions.
 </sub>
-
