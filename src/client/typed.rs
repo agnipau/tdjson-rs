@@ -24,6 +24,11 @@ impl TypedClient {
         }
     }
 
+    pub fn execute_untyped(&mut self, request: &str) -> Result<Option<&str>, TdlibError> {
+        // SAFE: we are taking self by mutable reference.
+        unsafe { self.inner.execute(request) }
+    }
+
     /// Synchronously executes TDLib request.
     ///
     /// May be called from any thread. Only a few requests can be executed synchronously.
@@ -33,14 +38,17 @@ impl TypedClient {
     {
         let s = serde_json::to_string(&request.tag()).map_err(TdlibError::InvalidRequestData)?;
 
-        // SAFE: we are taking self by mutable reference.
-        match unsafe { self.inner.execute(&s) } {
+        match self.execute_untyped(&s) {
             Ok(ok) => match ok {
                 Some(ok) => Ok(serde_json::from_str(ok).map_err(TdlibError::InvalidRequestData))?,
                 None => Ok(None),
             },
             Err(e) => Err(e),
         }
+    }
+
+    pub fn send_untyped(&self, request: &str) -> Result<(), TdlibError> {
+        self.inner.send(request)
     }
 
     /// Sends request to the TDLib client.
@@ -51,7 +59,12 @@ impl TypedClient {
         T: Method,
     {
         let s = serde_json::to_string(&request.tag()).map_err(TdlibError::InvalidRequestData)?;
-        self.inner.send(&s)
+        self.send_untyped(&s)
+    }
+
+    pub fn receive_untyped(&mut self, timeout: Duration) -> Result<Option<&str>, TdlibError> {
+        // SAFE: we are taking self by mutable reference.
+        unsafe { self.inner.receive(timeout) }
     }
 
     /// Receives incoming updates and request responses from the TDLib client.
@@ -59,8 +72,7 @@ impl TypedClient {
     /// May be called from any thread, but shouldn't be called simultaneously
     /// from two different threads.
     pub fn receive(&mut self, timeout: Duration) -> Result<Option<Response>, TdlibError> {
-        // SAFE: we are taking self by mutable reference.
-        match unsafe { self.inner.receive(timeout) } {
+        match self.receive_untyped(timeout) {
             Ok(ok) => match ok {
                 Some(ok) => Ok(serde_json::from_str(ok).map_err(TdlibError::InvalidRequestData))?,
                 None => Ok(None),
