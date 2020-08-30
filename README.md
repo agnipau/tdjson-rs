@@ -18,7 +18,7 @@ tdjson =  { git = "https://github.com/agnipau/tdjson-rs", features = ["types"] }
 ```
 
 Note that it will significantly increase compile time, because there a lot of
-proc macros that are required to run to generate the code. This feature is
+proc macros that are required to run to generate the types. This feature is
 disabled by default.
 
 ## Note
