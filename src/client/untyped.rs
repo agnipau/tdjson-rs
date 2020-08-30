@@ -1,7 +1,7 @@
 use {
     crate::{
         client::{receive::ReceiveClient, send::SendClient, unsafe_::UnsafeClient},
-        error::TdlibError,
+        error::Result,
     },
     std::{sync::Arc, time::Duration},
 };
@@ -9,7 +9,7 @@ use {
 #[derive(Debug)]
 pub struct Client {
     inner: UnsafeClient,
-    timeout: Duration,
+    pub timeout: Duration,
 }
 
 impl Client {
@@ -24,7 +24,7 @@ impl Client {
     /// Synchronously executes TDLib request.
     ///
     /// May be called from any thread. Only a few requests can be executed synchronously.
-    pub fn execute(&mut self, request: &str) -> Result<Option<&str>, TdlibError> {
+    pub fn execute(&mut self, request: &str) -> Result<Option<&str>> {
         // SAFE: we are taking self by mutable reference.
         unsafe { self.inner.execute(request) }
     }
@@ -32,7 +32,7 @@ impl Client {
     /// Sends request to the TDLib client.
     ///
     /// May be called from any thread.
-    pub fn send(&self, request: &str) -> Result<(), TdlibError> {
+    pub fn send(&self, request: &str) -> Result<()> {
         self.inner.send(request)
     }
 
@@ -40,7 +40,7 @@ impl Client {
     ///
     /// May be called from any thread, but shouldn't be called simultaneously
     /// from two different threads.
-    pub fn receive(&mut self, timeout: Duration) -> Result<Option<&str>, TdlibError> {
+    pub fn receive(&mut self, timeout: Duration) -> Result<Option<&str>> {
         // SAFE: we are taking self by mutable reference.
         unsafe { self.inner.receive(timeout) }
     }

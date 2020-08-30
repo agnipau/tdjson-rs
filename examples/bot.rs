@@ -1,5 +1,5 @@
 use {
-    std::{time::Duration, env},
+    std::{env, time::Duration},
     tdjson::TypedClient,
     tdlib_types::{methods, types},
 };

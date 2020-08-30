@@ -1,5 +1,8 @@
 use {
-    crate::{client::unsafe_::UnsafeClient, error::TdlibError},
+    crate::{
+        client::unsafe_::UnsafeClient,
+        error::{Error, Result},
+    },
     std::sync::Arc,
 };
 
@@ -15,16 +18,16 @@ unsafe impl Send for SendClient {}
 unsafe impl Sync for SendClient {}
 
 impl SendClient {
-    pub fn send(&self, request: &str) -> Result<(), TdlibError> {
+    pub fn send(&self, request: &str) -> Result<()> {
         self.inner.send(request)
     }
 
     #[cfg(feature = "types")]
-    pub fn send_typed<T>(&self, request: T) -> Result<(), TdlibError>
+    pub fn send_typed<T>(&self, request: T) -> Result<()>
     where
         T: tdlib_types::methods::Method,
     {
-        let s = serde_json::to_string(&request.tag()).map_err(TdlibError::InvalidRequestData)?;
+        let s = serde_json::to_string(&request.tag()).map_err(Error::InvalidRequestData)?;
         self.send(&s)
     }
 }

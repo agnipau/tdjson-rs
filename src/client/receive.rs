@@ -1,5 +1,8 @@
 use {
-    crate::{client::unsafe_::UnsafeClient, error::TdlibError},
+    crate::{
+        client::unsafe_::UnsafeClient,
+        error::{Error, Result},
+    },
     std::{sync::Arc, time::Duration},
 };
 
@@ -12,7 +15,7 @@ pub struct ReceiveClient {
 unsafe impl Send for ReceiveClient {}
 
 impl ReceiveClient {
-    pub fn receive(&mut self, timeout: Duration) -> Result<Option<&str>, TdlibError> {
+    pub fn receive(&mut self, timeout: Duration) -> Result<Option<&str>> {
         // SAFE: we are taking self by mutable reference.
         unsafe { self.inner.receive(timeout) }
     }
@@ -21,10 +24,10 @@ impl ReceiveClient {
     pub fn receive_typed(
         &mut self,
         timeout: Duration,
-    ) -> Result<Option<tdlib_types::types::Response>, TdlibError> {
+    ) -> Result<Option<tdlib_types::types::Response>> {
         match self.receive(timeout) {
             Ok(ok) => match ok {
-                Some(ok) => Ok(serde_json::from_str(ok).map_err(TdlibError::InvalidRequestData))?,
+                Some(ok) => Ok(serde_json::from_str(ok).map_err(Error::InvalidRequestData))?,
                 None => Ok(None),
             },
             Err(e) => Err(e),

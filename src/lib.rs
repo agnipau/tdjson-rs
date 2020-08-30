@@ -1,12 +1,12 @@
 mod client;
 mod error;
 
-pub use client::receive::ReceiveClient;
-pub use client::send::SendClient;
 #[cfg(feature = "types")]
 pub use client::typed::TypedClient;
-pub use client::untyped::Client;
-pub use error::TdlibError;
+pub use {
+    client::{receive::ReceiveClient, send::SendClient, untyped::Client},
+    error::{Error, Result},
+};
 
 use std::{ffi::CString, str};
 
@@ -17,8 +17,8 @@ use std::{ffi::CString, str};
 /// # Parameters
 ///
 /// `path` Maybe path to a file where the internal TDLib log will be written. Use `None` to switch back to the default logging behaviour.
-pub fn set_log_file_path(path: &str) -> Result<i32, TdlibError> {
-    let cpath = CString::new(path).map_err(TdlibError::NulError)?;
+pub fn set_log_file_path(path: &str) -> Result<i32> {
+    let cpath = CString::new(path).map_err(Error::NulError)?;
     Ok(unsafe { tdjson_sys::td_set_log_file_path(cpath.as_ptr()) })
 }
 
