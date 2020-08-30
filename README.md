@@ -47,7 +47,7 @@ client
 ```
 
 Just keep in mind that when you want to create a method using json! you must
-put it's camel case name in "@type".
+put its camel case name in "@type".
 
 #### License
 
